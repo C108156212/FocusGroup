@@ -21,7 +21,7 @@ pip install torch
 ```
 pip install pandas
 ```
-* mongo NoSQL資料庫套件
+* mongo 資料庫(NoSQL)套件
 ```
 pip install mongo
 ```
