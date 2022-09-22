@@ -24,3 +24,6 @@ pip install pandas
 ```
 pip install mongo
 ```
+
+## 使用說明
+裝下載完的訓練模型（model.zip），解壓縮到TCSA的根目錄下後即可。
