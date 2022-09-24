@@ -29,5 +29,5 @@ pip install mongo
 ```
 
 ## 使用說明
-訓練模型下載[TCSA_model](https://github.com/C108156212/FocusGroup/releases/tag/Latest)  
+[訓練模型下載(TCSA_model)](https://github.com/C108156212/FocusGroup/releases/tag/Latest)  
 將下載完的訓練模型（model.zip），解壓縮到TCSA的根目錄下後即可。  
