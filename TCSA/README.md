@@ -7,9 +7,13 @@ Orientation: 傳入一段文字語料，回傳情緒判斷結果。「Positive�
 訓練模型來源：[酒店外賣評論資料](https://github.com/SophonPlus/ChineseNlpCorpus)
 
 ## 套件需求
-* jieba 中文斷詞套件
+* jieba [中文斷詞套件](https://github.com/fxsjy/jieba)
 ```
 pip install jieba
+```
+* gensim [文字向量轉換套件](https://github.com/RaRe-Technologies/gensim)
+```
+pip install --upgrade gensim
 ```
 * torch 自然語言處理套件
 ```
