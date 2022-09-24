@@ -10,9 +10,11 @@ Orientation: 傳入一段文字語料，回傳情緒判斷結果。「Positive�
 * jieba [中文斷詞套件](https://github.com/fxsjy/jieba)
 ```
 pip install jieba
+pip install --upgrade jieba
 ```
 * gensim [文字向量轉換套件](https://github.com/RaRe-Technologies/gensim)
 ```
+pip install gensim
 pip install --upgrade gensim
 ```
 * torch 自然語言處理套件
