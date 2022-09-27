@@ -8,6 +8,9 @@ php 與 python
 ============================================================
 ## ！！需下載的 Python 套件！！ ## (pip install ???)
 cloudscraper
+bs4(beautifulsoup4)
+playwright
+pymongo
 facebook-crawler(已刪除)
 dcard-spider(已刪除)
 
@@ -15,7 +18,9 @@ dcard-spider(已刪除)
 mongodb(停用中)
 
 ## ！！其他安裝！！ ##
-安裝本地端 mongoDB
+--Link 1--(https://www.mongodb.com/docs/database-tools/mongoexport/)
+MongoDB Compass
+MongoDB Database Tools
 ============================================================
 ============================================================
 ============================================================
@@ -43,6 +48,8 @@ https://ithelp.ithome.com.tw/articles/10191161
 【BeautifulSoup篩選方法】
 1. https://blog.gtwang.org/programming/python-beautiful-soup-module-scrape-web-pages-tutorial/2/
 2. https://seanchien0525.medium.com/python-requests-beautifulsoup-%E7%88%AC%E8%9F%B2%E6%95%99%E5%AD%B8-83d146faa9e8
+【playwright】
+https://blog.jiatool.com/posts/playwright/
 【Facebook爬蟲】
 https://ithelp.ithome.com.tw/articles/10272370
 【降低Python網頁爬蟲被偵測封鎖的實用方法】
@@ -113,8 +120,12 @@ https://clay-atlas.com/blog/2020/04/24/python-cn-package-note-wordcloud-mask-bac
 【NoSQL介紹】
 https://www.youtube.com/watch?v=0buKQHokLK8
 【Python爬蟲資料存進MongoDB】
-1. https://www.796t.com/article.php?id=224847
-2. https://ithelp.ithome.com.tw/articles/10256624
+1. https://www.mongodb.com/docs/mongodb-shell/crud/insert/
+2. https://www.796t.com/article.php?id=224847
+3. https://ithelp.ithome.com.tw/articles/10256624
+4. https://ithelp.ithome.com.tw/articles/10191408
+【MongoDB匯出】
+https://blog.myctw.cc/post/29ee.html
 【Node.js 連接 MongoDB】
 https://www.runoob.com/nodejs/nodejs-mongodb.html
 ============================================================
