@@ -68,16 +68,3 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-
-npm install antd --save
-npm install moment --save
-npm install react-router-dom --save
-npm install babel/helper-string-parser --save
-npm install safe-regex-test --save
-npm install @humanwhocodes/gitignore-to-minimatch --save
-npm install @csstools/postcss-nested-calc --save
-npm install @csstools/postcss-text-decoration-shorthand --save
-npm install @csstools/postcss-trigonometric-functions --save
-npm install @nicolo-ribaudo/eslint-scope-5-internals --save
-
-資料夾內有import "antd/dist/antd.css" 改成 import "antd/dist/antd.min.css"
