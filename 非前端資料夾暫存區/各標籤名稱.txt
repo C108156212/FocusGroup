@@ -18,6 +18,9 @@ negative => 缺點 / 負面的【X】
 -P-
 positive => 優點 / 正面的【X】
 
+-S-
+site => 資料來源網站
+
 -T-
 title => 標題 / 文章ID
 time => 發佈時間 / 留言時間
