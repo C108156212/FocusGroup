@@ -1,0 +1,25 @@
+MongoDB 標籤
+
+
+-C-
+content => 文章內容
+comment => 留言內容
+
+-H-
+href => 連結
+
+-K-
+keyword => 關鍵字【X】
+
+-N-
+name => 發文者 / 留言者 / 留言ID
+negative => 缺點 / 負面的【X】
+
+-P-
+positive => 優點 / 正面的【X】
+
+-T-
+title => 標題 / 文章ID
+time => 發佈時間 / 留言時間
+tag => 文章標籤
+
