@@ -6,7 +6,7 @@ import random
 import cloudscraper # 方法二(建立在requests之上)
 # from urllib.request import Request, urlopen # 方法三
 
-dcard_article = pd.read_csv('./文章輸出結果-測試/Dcard文章資料.csv')
+dcard_article = pd.read_csv('./文章輸出結果-測試/Dcard文章資料test.csv')
 # headers = {'user-agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36'}
 
 scraper = cloudscraper.create_scraper(delay=10)
@@ -56,12 +56,12 @@ for articleID in dcard_article['文章ID']:
             # print(getdata)
     if stop == True:
         break
-    time.sleep(random.randint(40,45))
+    time.sleep(random.randint(45,50))
 
 alldata = pd.DataFrame(alldata)
 alldata.rename(columns={
     'id': '發文ID',
-    'anonymous': '',
+    'anonymous': '匿名',
     'postId': '文章ID',
     'createdAt': '發文時間',
     'updatedAt': '更新時間',
@@ -77,7 +77,7 @@ alldata.rename(columns={
 }, inplace=True)
 
 alldata.to_csv(
-    './留言輸出結果-測試/Dcard留言資料.csv',
+    './留言輸出結果-測試/Dcard留言資料test.csv',
     encoding='utf-8-sig',
     index=False
 )
