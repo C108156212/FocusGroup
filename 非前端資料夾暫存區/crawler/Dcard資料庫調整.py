@@ -9,7 +9,7 @@ from pymongo import MongoClient
 
 
 try:
-    conn = MongoClient(host='mongodb+srv://Crawler_admin:Crawler1562@cluster0.sc0f7sr.mongodb.net/?retryWrites=true&w=majority', port=5000)
+    conn = MongoClient(host='mongodb+srv://Crawler_admin:<Password>@cluster0.sc0f7sr.mongodb.net/?retryWrites=true&w=majority', port=5000)
     db = conn['Data']
     collection = db['Original_Data']
     # collection = db['Testing']
