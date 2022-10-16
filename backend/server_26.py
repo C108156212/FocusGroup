@@ -157,7 +157,7 @@ class PLOT1(Resource):
         f = open("comment.json", encoding="utf-8-sig")
         data = json.loads(f.read())
         json_comment = json.dumps(data, ensure_ascii=False)
-        return jsonify(json_post, json_comment)
+        return jsonify({"文章": json_post, "留言": json_comment})
 
 
 # adding the defined resources along with their corresponding urls
