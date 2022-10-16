@@ -41,134 +41,123 @@ app.config['JSON_AS_ASCII'] = False
 # creating an API object
 api = Api(app)
 
-# making a class for a particular resource
-# the get, post methods correspond to get and post requests
-# they are automatically mapped by flask_restful.
-# other methods include put, delete, etc.
-
-
-# class Hello(Resource):
-
-#     # corresponds to the GET request.
-#     # this function is called whenever there
-#     # is a GET request for this resource
-#     def get(self):
-
-#         return jsonify({'message': 'hello world'})
-
-#     # Corresponds to POST request
-#     def post(self):
-
-#         data = request.get_json()     # status code
-#         return jsonify({'data': data}), 201
-
-
-# another resource to calculate the square of a number
-# class Square(Resource):
-
-#     def get(self, num):
-
-#         return jsonify({'square': num**2})
-
-
-# class Data(Resource):
-
-#     def get(self):
-
-#         return jsonify({
-#             'Name': "我是誰",
-#             "Age": "22",
-#             "Date": x,
-#             "programming": "python"
-#         })
-
-
-# class TCSA1(Resource):
-#     def get(self, num):
-#         while True:
-#             n = int(num)
-#             data = table[n]['所有文']
-#             return jsonify({
-#                 "content": data,
-#                 "rating": str(TCSA.Degree(data)),
-#                 "emotional": TCSA.Orientation(data),
-#             })
-
 
 class PLOT1(Resource):
     def get(self, p1, p2, p3, p4, p5):
-        tabletags = collection.find({'content': {"$ne": None}}, {
-            'tag': 1, 'time': 1, 'site': 1})
-        # products內放使用者產品
-        p1 = str(p1)
-        p2 = str(p2)
-        p3 = str(p3)
-        p4 = str(p4)
-        p5 = str(p5)
+        postfilter = {"$or": [{"content": {'$regex': p1}},
+                      {"content": {'$regex': p2}}, {"content": {'$regex': p5}}, {"content": {'$regex': p3}}, {"content": {'$regex': p4}}]}
+        commentfilter = {"$or": [{"comment": {'$regex': p1}}, {"comment": {'$regex': p2}}, {
+            "comment": {'$regex': p3}}, {"comment": {'$regex': p4}}, {"comment": {'$regex': p5}}]}
+        posttags = collection.find(postfilter)
+        commenttags = collection.find(commentfilter)
+        # print(posttags)
+
+        pd.set_option('display.max_columns', None)
+        # pd.set_option('display.max_rows', None)
         products = [p1, p2, p3, p4, p5]
 
-        alldata = []
-        alldata = pd.DataFrame(tabletags)
-        alldata['time'] = pd.to_datetime(alldata['time'])
-        alldata['time'] = alldata['time'].apply(
+        postdata = []
+        commentdata = []
+        postdata = pd.DataFrame(posttags)
+        commentdata = pd.DataFrame(commenttags)
+        print(postdata)
+        print(commentdata)
+
+        # ---------------------文章整合----------------------------
+        postdata['time'] = pd.to_datetime(postdata['time'])
+        postdata['time'] = postdata['time'].apply(
             lambda x: x.strftime('%Y-%m-%d')).values
-        alltags = alldata.groupby(by=['time', 'site']).sum()
-        # 暫定從tag中抓取
-        populartags = str(alldata['tag'].sum())
-        # print(alltags)
-        products_voice = []
+        posttags = postdata.groupby(by=['time', 'site', 'title']).sum()
+        populartags_post = str(postdata['content'].sum())
+        # print(posttags)
+
+        # ---------------------留言整合---------------------------------
+        commentdata['time'] = pd.to_datetime(commentdata['time'])
+        commentdata['time'] = commentdata['time'].apply(
+            lambda x: x.strftime('%Y-%m-%d')).values
+        commenttags = commentdata.groupby(by=['time', 'site', 'title']).sum()
+        populartags_comment = str(commentdata['comment'].sum())
+        print(commenttags)
+
+        # ------------文章標籤聲量整合-------------------
+        post_voice = []
         popular_voice = []
-        top3_voice = []
 
+        comment_voice = []
         for m in products:
-            voice = populartags.count(m)
-            products_voice.append(voice)
+            voice = populartags_post.count(m)
+            post_voice.append(voice)
+        # print(post_voice)
 
-        brand_voice_df = pd.DataFrame(zip(products, products_voice))
-        brand_voice_df.columns = ["time", "hot"]
-        brand_voice_df = brand_voice_df.sort_values(
-            by=["hot"], ascending=False)
-        # populartag = brand_voice_df['time'].max()
-        alltag = brand_voice_df['time'].head(5)
-        # print('populartag:', populartag)
-        # for i in alltags['tag']:
-        #     # print(i)
-        #     voice = i.count(populartag)
-        #     popular_voice.append(voice)
-        # print(popular_voice)
+        post_voice_df = pd.DataFrame(zip(products, post_voice))
+        post_voice_df.columns = ["文章標籤名稱", "文章聲量"]
+        # print('post_voice_df:', post_voice_df)
+        post_voice_df = post_voice_df.sort_values(by=["文章聲量"], ascending=False)
+        print("post_voice_df:", post_voice_df)
 
-        for i in alltag:
+        # -------------留言標籤聲量整合-------------------
+        for m in products:
+            voice = populartags_comment.count(m)
+            comment_voice.append(voice)
+
+        comment_voice_df = pd.DataFrame(zip(products, comment_voice))
+        comment_voice_df.columns = ["留言標籤名稱", "留言聲量"]
+        # print('comment_voice_df:', comment_voice_df)
+        comment_voice_df = comment_voice_df.sort_values(
+            by=["留言聲量"], ascending=False)
+        # print("comment_voice_df:", comment_voice_df)
+
+        # ---------------文章時間來源ID標籤聲量整合-------------------
+        allpost_voice = []
+        for i in post_voice_df['文章標籤名稱']:
+            # print(i)
+            post_tags = []
+            for m in posttags['content']:
+                voice3 = m.count(i)
+                post_tags.append(voice3)
+            allpost_voice.append(post_tags)
+        print("allpost_voice", allpost_voice)
+
+        allpost_voice_df = pd.DataFrame(map(list, zip(*allpost_voice)))
+        allpost_voice_df.columns = post_voice_df['文章標籤名稱']
+        allpost_voice_df.index = posttags.index
+        allpost_voice_df.reset_index(inplace=True)
+
+        # print("allpost_voice_df_type:", type(allpost_voice_df))
+        # ---------------留言時間來源ID標籤聲量整合-------------------
+        allcomment_voice = []
+        for i in comment_voice_df['留言標籤名稱']:
             # print(i)
             tags = []
-            for m in alltags['tag']:
+            for m in commenttags['comment']:
                 voice3 = m.count(i)
                 tags.append(voice3)
-            top3_voice.append(tags)
+            allcomment_voice.append(tags)
 
-        # 最熱產品時間+產品名稱+聲量
-        # pt_voice_df = pd.DataFrame(zip(alltags.index, popular_voice))
-        # pt_voice_df.columns = ["time", populartag]
-        # pt_voice_df[["time", "site"]] = pt_voice_df["time"].apply(pd.Series)
-        # 前三熱產品時間+產品名稱+聲量
-        top3_voice_df = pd.DataFrame(map(list, zip(*top3_voice)))
-        top3_voice_df.columns = alltag
-        top3_voice_df.index = alltags.index
-        top3_voice_df.reset_index(inplace=True)
-        # json_data = top3_voice_df.to_json()
-        # top3_voice_df = top3_voice_df.to_dict()
-        with open('df.json', 'w', encoding='utf-8-sig') as file:
-            top3_voice_df.to_json(file, force_ascii=False)
+        allcomment_voice_df = pd.DataFrame(map(list, zip(*allcomment_voice)))
+        allcomment_voice_df.columns = comment_voice_df['留言標籤名稱']
+        allcomment_voice_df.index = commenttags.index
+        allcomment_voice_df.reset_index(inplace=True)
+
+        # ---------------------------輸出文章json檔----------------------
+        with open('post.json', 'w', encoding='utf-8-sig') as file:
+            allpost_voice_df.to_json(file, force_ascii=False)
         # print('done')
         # 顯示品牌聲量繪折線圖
 
-        f = open("df.json", encoding="utf-8-sig")
+        f = open("post.json", encoding="utf-8-sig")
         data = json.loads(f.read())
-        json_str = json.dumps(data, ensure_ascii=False)
+        json_post = json.dumps(data, ensure_ascii=False)
+        # -------------------------輸出留言json檔---------------------------
+        with open('comment.json', 'w', encoding='utf-8-sig') as file:
+            allcomment_voice_df.to_json(file, force_ascii=False)
+        # print('done')
+        # 顯示品牌聲量繪折線圖
 
-        # f = open("dcard_api_post_food.json", encoding="utf-8-sig")
-        # data = json.loads(f.read())
-        # json_str = json.dumps(data, ensure_ascii=False)
-        return jsonify(json_str)
+        f = open("comment.json", encoding="utf-8-sig")
+        data = json.loads(f.read())
+        json_comment = json.dumps(data, ensure_ascii=False)
+        return jsonify(json_post, json_comment)
 
 
 # adding the defined resources along with their corresponding urls
