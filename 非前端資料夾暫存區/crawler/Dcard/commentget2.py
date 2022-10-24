@@ -4,11 +4,13 @@ import time
 import pandas as pd
 import random
 import logging
-logger = logging.getLogger()
+
+from dataClear import postclean
 
 
-for id in range(16, 17):
-    dcard_article = pd.read_csv('Dcard文章資料'+str(id)+'_Clear.csv')
+def Commentget():
+    logger = logging.getLogger()
+    dcard_article = pd.read_csv('Dcard文章資料.csv')
     alldata = []
     number = 0
     start = 0
@@ -16,7 +18,7 @@ for id in range(16, 17):
         for x in dcard_article.iloc:
             x['文章ID'].astype('int')
             number += 1
-            if x['回覆數'] > 60:
+            if x['回覆數'] > 0:
 
                 last_comment = 0
                 url = 'https://www.dcard.tw/service/api/v2/posts/' + \
@@ -25,44 +27,143 @@ for id in range(16, 17):
                 doit = True
                 i = 0
                 while doit:
-                    time.sleep(random.uniform(30, 50))
+                    time.sleep(random.uniform(10, 20))
                     try:
                         if i != 0:
                             request_url = url + '?after=' + str(last_comment)
                         else:
                             request_url = url
-                        browser_type = p.chromium
+                        browser_type = p.webkit
                         browser = browser_type.launch(headless=False)
                         page = browser.new_page()
+                        page.set_default_timeout(0)
                         page.goto(request_url)
-                        # print(json.loads(page.text_content(selector='body')))
-                        getdata = json.loads(
-                            page.text_content(selector='body'))
-                        if len(getdata) == 4:
-                            doit = False
-                        elif len(getdata) > 0:
-                            alldata.extend(getdata)
-                            if len(getdata) == 30:
-                                last_comment += len(getdata)
-                                i = i+1
+                        if page.title == 'Just a moment...':
+                            print('wait a moment')
+                            page.wait_for_timeout(100)
+                            if page.locator("text=Verify you are human") == True:
+                                page.locator(
+                                    "text=Verify you are human").click()
+                            # page.locator("text=Verify you are human").click()
+                            page.wait_for_url(
+                                request_url)
+                            getdata = json.loads(
+                                page.text_content(selector='body'))
+                            if len(getdata) == 4:
+                                doit = False
+                            elif len(getdata) > 0:
+                                alldata.extend(getdata)
+                                if len(getdata) == 30:
+                                    last_comment += len(getdata)
+                                    i = i+1
+                                else:
+                                    doit = False
                             else:
                                 doit = False
+                            print(request_url)
+                            print(i)
+                            time.sleep(random.uniform(10, 20))
+                            browser.close()
                         else:
-                            doit = False
-                        print(request_url)
-                        print(i)
-                        time.sleep(random.uniform(30, 50))
-                        browser.close()
+                            # page.locator("text=Verify you are human").click()
+                            # print(json.loads(page.text_content(selector='body')))
+                            page.wait_for_url(
+                                request_url)
+                            getdata = json.loads(
+                                page.text_content(selector='body'))
+                            if len(getdata) == 4:
+                                doit = False
+                            elif len(getdata) > 0:
+                                alldata.extend(getdata)
+                                if len(getdata) == 30:
+                                    last_comment += len(getdata)
+                                    i = i+1
+                                else:
+                                    doit = False
+                            else:
+                                doit = False
+                            print(request_url)
+                            print(i)
+                            time.sleep(random.uniform(10, 20))
+                            browser.close()
                     except Exception as e:
                         logger.exception(
                             'Exception occurred while code execution: ' + str(e))
                         print('!!!!!!!!!!'+url+'!!!!!!!!!!!!!!!!!')
+                        time.sleep(random.uniform(10, 20))
+                        page.reload()
+                        page.frames
+                        page.wait_for_load_state('domcontentloaded')
+                        page.wait_for_url(
+                            request_url)
+                        if page.title() == 'Just a moment...':
+                            human = False
+                            print('wait a moment')
+                            page.goto(request_url)
+                            page.wait_for_timeout(8000)
+                            n = 1
+                            while human == False | n == 3:
+                                if page.title() == 'Just a moment...':
+                                    page.goto(request_url)
+                                    page.wait_for_timeout(8000)
+                                    # page.reload()
+                                    # page.frames
+                                    # page.wait_for_load_state(
+                                    #     'domcontentloaded')
+                                    page.wait_for_url(
+                                        request_url)
 
+                                    print(request_url)
+                                    print(i)
+                                    print('human=', human)
+                                    n += 1
+                                else:
+                                    # page.reload()
+                                    # page.frames
+                                    page.wait_for_timeout(8000)
+                                    page.wait_for_url(
+                                        request_url)
+                                    getdata = json.loads(
+                                        page.text_content(selector='body'))
+                                    if len(getdata) == 4:
+                                        doit = False
+                                    elif len(getdata) > 0:
+                                        alldata.extend(getdata)
+                                        if len(getdata) == 30:
+                                            last_comment += len(getdata)
+                                            i = i+1
+                                        else:
+                                            doit = False
+                                    human = True
+                                    print('human=', human)
+                        else:
+                            print('wait')
+                            print(page.title())
+                            # time.sleep(random.uniform(10, 20))
+                            page.wait_for_url(
+                                request_url)
+                            getdata = json.loads(
+                                page.text_content(selector='body'))
+                            if len(getdata) == 4:
+                                doit = False
+                            elif len(getdata) > 0:
+                                alldata.extend(getdata)
+                                if len(getdata) == 30:
+                                    last_comment += len(getdata)
+                                    i = i+1
+                                else:
+                                    doit = False
+                            else:
+                                doit = False
+                            print(request_url)
+                            print(i)
+                            time.sleep(random.uniform(10, 20))
+                            browser.close()
                         if str(e) == 'HTTP Error 404: Not Found':
                             doit = False
-                        time.sleep(random.uniform(60, 180))
+                        time.sleep(random.uniform(10, 20))
                         browser.close()
-                print(f'number={number}')
+                    print(f'number={number}')
             else:
                 print(type(x['文章ID']))
                 print(x['回覆數'])
@@ -86,8 +187,7 @@ for id in range(16, 17):
     }, inplace=True)
     # 存檔
     alldata.to_csv(
-        'Dcard留言資料'+str(id)+str(start)+'至' +
-        str(number)+'筆資料.csv',  # 檔案名稱
+        'Dcard留言資料.csv',  # 檔案名稱
         encoding='utf-8-sig',  # 編碼
         index=False  # 是否保留index
     )
@@ -95,3 +195,8 @@ for id in range(16, 17):
     start = number
     print(f'start={start}')
     # browser.close()
+    print("commentgetdone")
+    postclean()
+
+
+Commentget()
