@@ -3,7 +3,7 @@ import calendar
 from datetime import datetime
 
 # 關鍵字搜尋
-def KeySearch(keyword="#", period="month"):
+def KeySearch(keyword="#", period="day"):
     # 宣告回傳值變數
     CommentCount = 0
     LastCommentCount = 0
@@ -280,25 +280,25 @@ def KeySearch(keyword="#", period="month"):
     # 留言數成長比率
     if LastCommentCount > 0:
         CommentAmount = "{:.0%}".format(CommentCount / LastCommentCount * 100)
-        CommentLabel = "較上期增加" if CommentAmount < 0 else "較上期減少"
+        CommentLabel = "較上期增加" if CommentCount / LastCommentCount < 0 else "較上期減少"
     else:
         CommentLabel = "無本期資料" if CommentCount == 0 else "無上期資料"
     # 正面留言數成長比率
     if LastPositiveCount > 0:
         PositiveAmount = "{:.0%}".format(PositiveCount / LastPositiveCount * 100)
-        PositiveLabel = "較上期增加" if PositiveLabel < 0 else "較上期減少"
+        PositiveLabel = "較上期增加" if PositiveCount / LastPositiveCount < 0 else "較上期減少"
     else:
         PositiveLabel = "無本期資料" if PositiveCount == 0 else "無上期資料"
     # 負面留言數成長比率
     if LastNegativeCount > 0:
         NegativeAmount = "{:.0%}".format(NegativeCount / LastNegativeCount * 100)
-        NegativeLabel = "較上期增加" if NegativeLabel < 0 else "較上期減少"
+        NegativeLabel = "較上期增加" if NegativeCount / LastNegativeCount < 0 else "較上期減少"
     else:
         NegativeLabel = "無本期資料" if NegativeCount == 0 else "無上期資料"
     # 中立留言數成長比率
     if LastNeutralCount > 0:
         NeutralAmount = "{:.0%}".format(NeutralCount / LastNeutralCount * 100)
-        NeutralLabel = "較上期增加" if NeutralLabel < 0 else "較上期減少"
+        NeutralLabel = "較上期增加" if NeutralCount / LastNeutralCount < 0 else "較上期減少"
     else:
         NeutralLabel = "無本期資料" if NeutralCount == 0 else "無上期資料"
 

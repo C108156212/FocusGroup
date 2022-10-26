@@ -1,6 +1,5 @@
 # 每 60 秒，自動更新，由 Dcard API 提供的「美食版」資訊。
 
-from tokenize import Double
 from pymongo import MongoClient
 import pathlib
 import pandas
