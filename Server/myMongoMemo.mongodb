@@ -1,0 +1,12 @@
+// MongoDB Playground
+// Use Ctrl+Space inside a snippet or a string literal to trigger completions.
+
+// The current database to use.
+use('Data');
+
+// Search for documents in the current collection.
+
+// db.comment.renameCollection("Dcard") 更改db資料庫中 comment資料表的名稱 -> Dcard
+// db.Dcard.updateMany( {}, { $rename: { "clean": "comment" } } ) 更改db資料庫中 Dcard資料表中 clean欄位的名稱 -> comment
+// db.table.update({}, {$set: {content:""}}, {multi: true})   db資料庫的table資料表中 新增一個名為content的字串欄位
+// db.table.update({}, {$unset:{match:""}},false, true) db資料庫的table資料表中 刪除一個名為match的欄位
